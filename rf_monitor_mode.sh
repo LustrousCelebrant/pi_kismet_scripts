@@ -2,7 +2,9 @@
 
 
 ##### Sets Color variables #####
-source /home/ubuntu/scripts/colors.sh
+SCRIPT_DIR=$(dirname $(readlink -f "$0"))
+COLOR_SOURCE="$SCRIPT_DIR/colors.sh"
+source $COLOR_SOURCE
 ################################
 
 
