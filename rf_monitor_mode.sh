@@ -106,7 +106,7 @@ else
 fi
 
 # Get the names of wireless interfaces and execute set_monitor_mode
-interfaces=($(iwconfig 2>/dev/null | awk '/IEEE 802.11/ {print $1}'))
+interfaces=($(ip a 2>/dev/null | awk '/^[0-9]*: wlp[0-9a-zA-Z]*/ {sub(/:$/, "", $2); print $2}'))
 
 if [ ${#interfaces[@]} -eq 0 ]; then
     echo -e "${RED}No wireless interfaces found.${NOCOLOR}"
