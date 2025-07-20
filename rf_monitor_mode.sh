@@ -7,7 +7,12 @@ COLOR_SOURCE="$SCRIPT_DIR/colors.sh"
 source $COLOR_SOURCE
 ################################
 
-
+##### Make sure user is root #####
+if [[ $EUID -ne 0 ]]; then
+    echo -e "${YELLOW}Not running as root—relaunching with sudo...${NOCOLOR}"
+    exec sudo "$0" "$@"
+fi
+################################
 
 ##### Unblocking / enabling all RF transmitters #####
 sudo rfkill unblock all 
