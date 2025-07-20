@@ -18,7 +18,9 @@ fi
 sudo rfkill unblock all 
 #####################################################
 
-
+##### Define file for auto-assigned sources #####
+source_file="/tmp/auto_sources.conf"
+#####################################################
 
 ##### Stopping services that interfere with wifi capture #####
 
@@ -77,6 +79,17 @@ set_monitor_mode() {
     fi
 }
 
+add_to_kismet_site() {
+    source_file="$SCRIPT_DIR/auto_sources.conf"
+    if [ ! -f source_file ]; then
+        echo -e "${RED}Source config file not found${NOCOLOR}"
+        return 1
+    fi
+    local interface=$1
+    echo "source=$interface" >> source_file
+    return 0
+}
+
 # Check if NetworkManager is running and stop it if active
 if pgrep -xcho -e  "NetworkManager" > /dev/null; then
     sudo systemctl stop NetworkManager
@@ -113,8 +126,11 @@ if [ ${#interfaces[@]} -eq 0 ]; then
     exit 1
 fi
 
+rm $source_file
+
 for interface in "${interfaces[@]}"; do
     set_monitor_mode $interface
+    add_to_kismet_site $interface
 done
 
 exit 0
